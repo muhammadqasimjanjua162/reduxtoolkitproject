@@ -1,10 +1,16 @@
 import React from "react";
 //import { useState } from "react/cjs/react.development";
 import { v4 as uuidv4 } from "uuid";
+import { addData, editData } from "../../features/todo/todoSlice";
 import { useState } from "react";
 import FormInput from "./FormInput";
 import Table from "./Tabel";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 function DisplayData() {
+  const dispatch = useDispatch();
+  const data = useSelector((dataofemployee) => dataofemployee);
+  console.log(data, "data of employee");
   const [tableData, setTableData] = useState([]);
   const [formInputData, setformInputData] = useState({
     fullName: "",
@@ -12,8 +18,8 @@ function DisplayData() {
     salary: "",
     id: "",
   });
-  console.log(tableData, "tabledatas");
-  console.log(formInputData);
+  // console.log(tableData, "tabledatas");
+  // console.log(formInputData);
   const [id, setID] = useState("");
 
   const handleChange = (evnt) => {
@@ -29,19 +35,25 @@ function DisplayData() {
     const checkEmptyInput = Object.values(formInputData).every(
       (res) => res === ""
     );
-    console.log(checkEmptyInput);
-    console.log(checkEmptyInput, "check");
+    // console.log(checkEmptyInput);
+    // console.log(checkEmptyInput, "check");
     if (!checkEmptyInput) {
       if (formInputData.id) {
-        const arr = tableData.map((elem) =>
-          formInputData.id === elem.id ? formInputData : elem
-        );
-        setTableData(arr);
+        dispatch(editData(formInputData));
+        // const arr = tableData.map((elem) =>
+        //   formInputData.id === elem.id ? formInputData : elem
+        // );
+        // console.log(arr, "oray");
+        //using dispatch
+        // setTableData(arr);
+        // console.log("araygharay", arr);
+
         const emptyInput = { fullName: "", emailAddress: "", salary: "" };
         setformInputData(emptyInput);
       } else {
         //  const newData = (data) => [...data, formInputData];
-        setTableData((data) => [...data, { ...formInputData, id: uuidv4() }]);
+        dispatch(addData(formInputData));
+        //  setTableData((data) => [...data, { ...formInputData, id: uuidv4() }]);
         const emptyInput = { fullName: "", emailAddress: "", salary: "" };
         setformInputData(emptyInput);
       }
@@ -49,11 +61,11 @@ function DisplayData() {
   };
   const handleCallBack = (task) => {
     setformInputData(task);
-    console.log(task, "callbasck");
+    // console.log(task, "callbasck");
   };
   const handleDeletedata = (data) => {
-    console.log(data, "in delete");
-    setTableData(data);
+    // console.log(data, "in delete");
+    //    setTableData(data);
   };
 
   return (
